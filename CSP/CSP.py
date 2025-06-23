@@ -118,7 +118,6 @@ class CSP:
       self.pop_domain(domain1)
       self.pop_domain(domain2)
 
-
   """
     REVISE(X, Y): Makes variable X arc consistent with Y
     Returns True if a revision was made (i.e., a value was removed from X's domain)

@@ -67,6 +67,24 @@ class BinaryLessThanConstraint(Constraint):
 
   def to_string(self):
      return f"{self.variable1} < {self.variable2}"
+  
+"""
+  Binary Less than constraint: A ≤ B
+"""
+class BinaryLessEqualConstraint(Constraint):
+  def __init__(self, variable1, variable2, verbose=False):
+    super().__init__([variable1, variable2])
+    self.variable1 = variable1
+    self.variable2 = variable2
+    self.verbose = verbose
+
+  def satisfied(self, assignment):
+    if self.variable1 not in assignment or self.variable2 not in assignment:
+        return True
+    return assignment[self.variable1] <= assignment[self.variable2]
+
+  def to_string(self):
+     return f"{self.variable1} ≤ {self.variable2}"
 
 """
   Binary Less than constraint: A > B
@@ -84,6 +102,24 @@ class BinaryGreaterThanConstraint(Constraint):
 
   def to_string(self):
      return f"{self.variable1} > {self.variable2}"
+
+"""
+  Binary Less than constraint: A ≥ B
+"""
+class BinaryGreatEqualConstraint(Constraint):
+  def __init__(self, variable1, variable2, verbose=False):
+    super().__init__([variable1, variable2])
+    self.variable1 = variable1
+    self.variable2 = variable2
+    self.verbose = verbose
+
+  def satisfied(self, assignment):
+    if self.variable1 not in assignment or self.variable2 not in assignment:
+        return True
+    return assignment[self.variable1] >= assignment[self.variable2]
+
+  def to_string(self):
+     return f"{self.variable1} ≥ {self.variable2}"
 
 """
   N-ary inequality constraint.
@@ -143,6 +179,46 @@ class NaryLessThanConstraint(Constraint):
       output_string = str()
       for var in self.vars:
         output_string += f'{var} < '
+      output_string = output_string[:-2]
+      return output_string
+
+"""
+  N-ary Less equal constraint
+  This method is less efficients respect the binary variaton, so use binary if your constraint is binary.
+"""
+class NaryLessEqualConstraint(Constraint):
+    def __init__(self, *variables):
+        super().__init__(list(variables))
+        self.vars = variables
+
+    def satisfied(self, assignment):
+        assigned = [assignment[var] for var in self.variables if var in assignment]
+        return len(assigned) == 0 or all(assigned[i] <= assigned[i+1] for i in range(len(assigned)-1))
+
+    def to_string(self):
+      output_string = str()
+      for var in self.vars:
+        output_string += f'{var} ≤ '
+      output_string = output_string[:-2]
+      return output_string
+
+"""
+  N-ary Less equal constraint
+  This method is less efficients respect the binary variaton, so use binary if your constraint is binary.
+"""
+class NaryGreatEqualConstraint(Constraint):
+    def __init__(self, *variables):
+        super().__init__(list(variables))
+        self.vars = variables
+
+    def satisfied(self, assignment):
+        assigned = [assignment[var] for var in self.variables if var in assignment]
+        return len(assigned) == 0 or all(assigned[i] >= assigned[i+1] for i in range(len(assigned)-1))
+
+    def to_string(self):
+      output_string = str()
+      for var in self.vars:
+        output_string += f'{var} ≥ '
       output_string = output_string[:-2]
       return output_string
 
