@@ -178,7 +178,6 @@ class CSP:
                 queue.append((Z, X))
     return True
 
-
   """
     Start the backtracking search
   """
