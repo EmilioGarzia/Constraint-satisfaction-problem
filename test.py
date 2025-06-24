@@ -1,6 +1,6 @@
-from CSP.CSP import CSP
-from CSP.Domain import Domain
-from CSP.Constraint import BinaryInequalityConstraint
+from CSP.csp import CSP
+from CSP.domain import Domain
+from CSP.constraint import BinaryInequalityConstraint
 
 problem = CSP()
 

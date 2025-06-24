@@ -1,7 +1,7 @@
 import networkx as nx
 import matplotlib.pyplot as plt
-from CSP.Constraint import *
-from CSP.Domain import Domain
+from CSP.constraint import *
+from CSP.domain import Domain
 
 class CSP:
   def __init__(self, variables=None, domains=None, constraints=None, verbose=True):

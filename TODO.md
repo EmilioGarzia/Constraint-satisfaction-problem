@@ -3,3 +3,4 @@
 * Adding heuristics
 * Expand constraints
 * Graph visualization could be more accurate, showing also variable's values
+* Develope a method that allow the implementationa of a custom constraints
