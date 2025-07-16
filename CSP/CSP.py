@@ -146,28 +146,25 @@ class CSP:
       if found:
         new_domain.append(x)
       else:
-        revised = True  # x had to be removed
-
-    domain_X.domain_entities = new_domain  # update domain
+        revised = True
+        
+    domain_X.domain_entities = new_domain 
     return revised
 
   def ac3(self):
-    # Costruisci la coda con tutti gli archi (X,Y) presenti nei vincoli binari
     queue = []
     for constraint in self.constraints:
         if len(constraint.variables) == 2:
             X, Y = constraint.variables
             queue.append((X, Y))
-            queue.append((Y, X))  # per farlo bidirezionale
+            queue.append((Y, X))
 
     while queue:
         X, Y = queue.pop(0)
         if self.revise(X, Y):
             domain_X = self.get_domain(self.variables[X]["domain"])
-            # Se dominio svuotato → fallimento
             if len(domain_X.domain_entities) == 0:
                 return False
-            # Aggiungi alla coda archi (Z, X) dove Z è vicino a X ma diverso da Y
             neighbors = set()
             for c in self.constraints:
                 if X in c.variables:
@@ -182,19 +179,17 @@ class CSP:
     Start the backtracking search
   """
   def backtracking_search(self):
-    return self.backtrack({})  # assignment iniziale vuoto
+    return self.backtrack({})
 
   """
     Backtrack: recursive CSP solver
   """
   def backtrack(self, assignment):
-    # Se tutte le variabili sono assegnate, ritorna la soluzione
     if len(assignment) == len(self.variables):
       return assignment
-
-    # Seleziona una variabile non ancora assegnata
+      
     unassigned_vars = [v for v in self.variables if v not in assignment]
-    var = unassigned_vars[0]  # euristica: prima variabile libera
+    var = unassigned_vars[0]  # naive heuristic (choose the first available value)
 
     domain_label = self.variables[var]["domain"]
     domain_values = self.get_domain(domain_label).domain_entities
@@ -206,12 +201,12 @@ class CSP:
       if self.is_consistent(var, local_assignment):
         result = self.backtrack(local_assignment)
         if result is not None:
-          return result  # successo
+          return result
 
-    return None  # fallimento
+    return None
 
   """
-    Controlla se l'assegnamento è consistente con i vincoli del CSP
+    Check if the assignment is consistent
   """
   def is_consistent(self, var, assignment):
     for constraint in self.constraints:
@@ -220,7 +215,9 @@ class CSP:
           return False
     return True
 
-
+  """
+    Depict a graph that visualize CSP graph problem
+  """"
   def plot_graph_problem(self):
     G = nx.Graph()
     G.add_nodes_from(self.variables.keys())
@@ -236,6 +233,5 @@ class CSP:
                 for j in range(i + 1, len(vars)):
                     G.add_edge(vars[i], vars[j])
 
-    # Plot
     nx.draw(G, with_labels=True, node_color='cyan', node_size=1000, font_size=16)
     plt.show()
